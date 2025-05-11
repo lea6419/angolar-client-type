@@ -1,0 +1,83 @@
+.file-management-container {
+    direction: rtl;
+    padding: 20px;
+    font-family: 'Arial';
+  }
+  
+  .upload-label {
+    background-color: #1976d2;
+    color: white;
+    padding: 10px 15px;
+    border-radius: 6px;
+    cursor: pointer;
+    display: inline-block;
+    margin-bottom: 20px;
+  }
+  
+  .files-section {
+    margin-bottom: 30px;
+  }
+  
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 10px;
+  }
+  
+  th, td {
+    border: 1px solid #ddd;
+    padding: 10px;
+    text-align: right;
+  }
+  
+  td.ממתין {
+    color: orange;
+  }
+  td.בהקלדה {
+    color: blue;
+  }
+  td.הושלם {
+    color: green;
+  }
+  .file-management-container {
+    direction: rtl;
+    padding: 20px;
+    font-family: 'Arial';
+  }
+  
+  .upload-label {
+    background-color: #1976d2;
+    color: white;
+    padding: 10px 15px;
+    border-radius: 6px;
+    cursor: pointer;
+    display: inline-block;
+    margin-bottom: 20px;
+  }
+  
+  .files-section {
+    margin-bottom: 30px;
+  }
+  
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 10px;
+  }
+  
+  th, td {
+    border: 1px solid #ddd;
+    padding: 10px;
+    text-align: right;
+  }
+  
+  td.ממתין {
+    color: orange;
+  }
+  td.בהקלדה {
+    color: blue;
+  }
+  td.הושלם {
+    color: green;
+  }
+    

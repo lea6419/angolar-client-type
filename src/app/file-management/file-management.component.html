@@ -1,0 +1,39 @@
+<div>
+  <input type="file" (change)="onFileSelected($event)" />
+  <button (click)="uploadFile()">העלה קובץ</button>
+</div>
+
+<table>
+  <thead>
+    <tr>
+      <th>שם הקובץ</th>
+      <th>שם הלקוח</th>
+      <th>תאריך</th>
+      <th>סטטוס</th>
+      <th>גודל</th>
+      <th>פעולות</th>
+    </tr>
+  </thead>
+  <tbody>
+    @if (loading) {
+    <tr>
+      <td colspan="6">טוען נתונים...</td>
+    </tr>
+    }
+    @else {
+    @for (file of filteredFiles; track file.id) {
+    <tr>
+      <td>{{ file.fileName }}</td>
+      <td>{{ name }}</td>
+      <td>{{ file.date }}</td>
+      <td><span [style.color]="statusColors[file.status]">{{ statusLabels[file.status] }}</span></td>
+      <td>{{ file.size }}</td>
+      <td>
+        <button (click)="downloadFile(file.id)">הורדה</button>
+        <button (click)="deleteFile(file.id)">🗑️</button>
+      </td>
+    </tr>
+    }
+    }
+  </tbody>
+</table>
