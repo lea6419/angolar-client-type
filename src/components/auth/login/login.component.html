@@ -1,0 +1,130 @@
+<div class="auth-container">
+  <!-- רקע מונפש -->
+  <div class="animated-background">
+    <div class="floating-shape shape-1"></div>
+    <div class="floating-shape shape-2"></div>
+    <div class="floating-shape shape-3"></div>
+    <div class="floating-shape shape-4"></div>
+    <div class="floating-shape shape-5"></div>
+  </div>
+
+  <!-- תוכן העמוד -->
+  <div class="auth-content">
+    <!-- לוגו וכותרת -->
+    <div class="auth-header">
+      <div class="logo-container">
+        <div class="logo-icon">📝</div>
+        <h1 class="logo-text">TypePro</h1>
+      </div>
+      <p class="welcome-text">ברוך השב!</p>
+    </div>
+
+    <!-- כרטיס התחברות -->
+    <mat-card class="auth-card">
+      <mat-card-header class="card-header">
+        <div class="header-icon">🔐</div>
+        <mat-card-title class="card-title">התחברות</mat-card-title>
+        <mat-card-subtitle class="card-subtitle">
+          התחבר כדי לגשת לחשבון שלך
+        </mat-card-subtitle>
+      </mat-card-header>
+
+      <mat-card-content class="card-content">
+        <form class="auth-form" (ngSubmit)="onLogin()">
+          <!-- שגיאה -->
+          <div class="error-message" *ngIf="errorMessage">
+            <mat-icon class="error-icon">error</mat-icon>
+            {{ errorMessage }}
+          </div>
+
+          <!-- אימייל -->
+          <mat-form-field class="form-field" appearance="outline">
+            <mat-label>כתובת אימייל</mat-label>
+            <input 
+              matInput 
+              type="email"
+              [(ngModel)]="form.email" 
+              name="email"
+              required
+              placeholder="example@email.com"
+            >
+            <mat-icon matSuffix class="field-icon">email</mat-icon>
+          </mat-form-field>
+
+          <!-- סיסמה -->
+          <mat-form-field class="form-field" appearance="outline">
+            <mat-label>סיסמה</mat-label>
+            <input 
+              matInput 
+              type="password"
+              [(ngModel)]="form.password" 
+              name="password"
+              required
+              placeholder="הכנס סיסמה"
+            >
+            <mat-icon matSuffix class="field-icon">lock</mat-icon>
+          </mat-form-field>
+
+          <!-- תיבת סימון לזכור אותי -->
+          <div class="checkbox-container">
+            <label class="custom-checkbox">
+              <input type="checkbox">
+              <span class="checkmark"></span>
+              זכור אותי
+            </label>
+            <a href="#" class="forgot-password">שכחת סיסמה?</a>
+          </div>
+
+          <!-- כפתור התחברות -->
+          <button 
+            mat-raised-button 
+            type="submit" 
+            class="auth-button login-button"
+            [disabled]="!form.email || !form.password"
+          >
+            <mat-icon class="button-icon">login</mat-icon>
+            <span>התחבר</span>
+            <div class="button-ripple"></div>
+          </button>
+        </form>
+
+        <!-- הפרדה -->
+        <div class="divider">
+          <span class="divider-text">או</span>
+        </div>
+
+        <!-- התחברות חברתית -->
+        <div class="social-login">
+          <button mat-stroked-button class="social-button google-button">
+            <img src="https://developers.google.com/identity/images/g-logo.png" alt="Google" class="social-icon">
+            התחבר עם Google
+          </button>
+        </div>
+
+        <!-- קישור לרישום -->
+        <div class="auth-footer">
+          <p class="footer-text">
+            עדיין אין לך חשבון?
+            <a routerLink="/register" class="auth-link">הירשם כאן</a>
+          </p>
+        </div>
+      </mat-card-content>
+    </mat-card>
+
+    <!-- סטטיסטיקות -->
+    <div class="stats-section">
+      <div class="stat-item">
+        <div class="stat-number">10K+</div>
+        <div class="stat-label">משתמשים</div>
+      </div>
+      <div class="stat-item">
+        <div class="stat-number">500K+</div>
+        <div class="stat-label">קבצים הומרו</div>
+      </div>
+      <div class="stat-item">
+        <div class="stat-number">99.9%</div>
+        <div class="stat-label">זמינות</div>
+      </div>
+    </div>
+  </div>
+</div>

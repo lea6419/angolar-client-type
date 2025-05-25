@@ -1,8 +1,9 @@
 import { Component } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
-import { LoginComponent } from "./auth/login/login.component";
-import { RegisterComponent } from "./auth/register/register.component";
-import { HeaderComponent } from "./header/header.component";
+import { LoginComponent } from '../components/auth/login/login.component';
+import { RegisterComponent } from '../components/auth/register/register.component';
+import { HeaderComponent } from '../components/header/header.component';
+
 
 
 @Component({

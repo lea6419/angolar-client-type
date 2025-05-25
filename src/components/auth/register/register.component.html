@@ -1,0 +1,134 @@
+<div class="auth-container">
+  <!-- רקע מונפש -->
+  <div class="animated-background">
+    <div class="floating-shape shape-1"></div>
+    <div class="floating-shape shape-2"></div>
+    <div class="floating-shape shape-3"></div>
+    <div class="floating-shape shape-4"></div>
+    <div class="floating-shape shape-5"></div>
+  </div>
+
+  <!-- תוכן העמוד -->
+  <div class="auth-content">
+    <!-- לוגו וכותרת -->
+    <div class="auth-header">
+      <div class="logo-container">
+        <div class="logo-icon">📝</div>
+        <h1 class="logo-text">TypePro</h1>
+      </div>
+      <p class="welcome-text">הצטרף אלינו היום</p>
+    </div>
+
+    <!-- כרטיס רישום -->
+    <mat-card class="auth-card">
+      <mat-card-header class="card-header">
+        <div class="header-icon">✨</div>
+        <mat-card-title class="card-title">יצירת חשבון חדש</mat-card-title>
+        <mat-card-subtitle class="card-subtitle">
+          המר את הקבצים שלך לטקסט בקלות
+        </mat-card-subtitle>
+      </mat-card-header>
+
+      <mat-card-content class="card-content">
+        <form class="auth-form" (ngSubmit)="onRegister()">
+          <!-- שגיאה -->
+          <div class="error-message" *ngIf="errorMessage">
+            <mat-icon class="error-icon">error</mat-icon>
+            {{ errorMessage }}
+          </div>
+
+          <!-- שם מלא -->
+          <mat-form-field class="form-field" appearance="outline">
+            <mat-label>שם מלא</mat-label>
+            <input 
+              matInput 
+              [(ngModel)]="form.name" 
+              name="name"
+              required
+              placeholder="הכנס שם מלא"
+            >
+            <mat-icon matSuffix class="field-icon">person</mat-icon>
+          </mat-form-field>
+
+          <!-- אימייל -->
+          <mat-form-field class="form-field" appearance="outline">
+            <mat-label>כתובת אימייל</mat-label>
+            <input 
+              matInput 
+              type="email"
+              [(ngModel)]="form.email" 
+              name="email"
+              required
+              placeholder="example@email.com"
+            >
+            <mat-icon matSuffix class="field-icon">email</mat-icon>
+          </mat-form-field>
+
+          <!-- סיסמה -->
+          <mat-form-field class="form-field" appearance="outline">
+            <mat-label>סיסמה</mat-label>
+            <input 
+              matInput 
+              type="password"
+              [(ngModel)]="form.password" 
+              name="password"
+              required
+              placeholder="לפחות 6 תווים"
+            >
+            <mat-icon matSuffix class="field-icon">lock</mat-icon>
+          </mat-form-field>
+
+          <!-- אימות סיסמה -->
+          <mat-form-field class="form-field" appearance="outline">
+            <mat-label>אימות סיסמה</mat-label>
+            <input 
+              matInput 
+              type="password"
+              [(ngModel)]="form.confirmPassword" 
+              name="confirmPassword"
+              required
+              placeholder="הכנס סיסמה שוב"
+            >
+            <mat-icon matSuffix class="field-icon">lock_clock</mat-icon>
+          </mat-form-field>
+
+          <!-- כפתור רישום -->
+          <button 
+            mat-raised-button 
+            type="submit" 
+            class="auth-button register-button"
+            [disabled]="!form.name || !form.email || !form.password || !form.confirmPassword"
+          >
+            <mat-icon class="button-icon">person_add</mat-icon>
+            <span>הירשם עכשיו</span>
+            <div class="button-ripple"></div>
+          </button>
+        </form>
+
+        <!-- קישור להתחברות -->
+        <div class="auth-footer">
+          <p class="footer-text">
+            כבר יש לך חשבון?
+            <a routerLink="/login" class="auth-link">התחבר כאן</a>
+          </p>
+        </div>
+      </mat-card-content>
+    </mat-card>
+
+    <!-- תכונות המערכת -->
+    <div class="features-section">
+      <div class="feature-item">
+        <div class="feature-icon">🚀</div>
+        <div class="feature-text">מהיר ויעיל</div>
+      </div>
+      <div class="feature-item">
+        <div class="feature-icon">🔒</div>
+        <div class="feature-text">מאובטח לחלוטין</div>
+      </div>
+      <div class="feature-item">
+        <div class="feature-icon">💎</div>
+        <div class="feature-text">איכות מעולה</div>
+      </div>
+    </div>
+  </div>
+</div>

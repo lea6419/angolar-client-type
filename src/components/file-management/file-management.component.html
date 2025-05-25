@@ -1,0 +1,689 @@
+<!-- חלק זה מחליף את .files-grid הקיים -->
+<div class="files-card-modern">
+  <!-- Header עם חיפוש וסינונים -->
+  <div class="files-header-modern">
+    <div class="files-header-left">
+      <h2 class="files-title-modern">
+        <span class="files-icon">📋</span>
+        הקבצים שלי
+      </h2>
+      <div class="files-badge">{{ totalItems }} פריטים</div>
+    </div>
+    
+    <div class="header-actions">
+      <!-- כפתור תצוגת טבלה -->
+      <button 
+        class="view-toggle-btn" 
+        [class.active]="viewMode === 'table'"
+        (click)="toggleViewMode()"
+        title="תצוגת טבלה"
+      >
+        <span class="btn-icon">📊</span>
+        <span class="btn-text">תצוגת טבלה</span>
+      </button>
+      
+      <!-- כפתור תצוגת כרטיסים -->
+      <button 
+        class="view-toggle-btn" 
+        [class.active]="viewMode === 'cards'"
+        (click)="toggleViewMode()"
+        title="תצוגת כרטיסים"
+      >
+        <span class="btn-icon">🗃️</span>
+        <span class="btn-text">תצוגת כרטיסים</span>
+      </button>
+    </div>
+  </div>
+
+  <!-- פאנל חיפוש וסינון מתקדם -->
+  <div class="search-filter-panel">
+    <div class="search-section">
+      <h3 class="section-title">
+        <span class="section-icon">🔍</span>
+        חיפוש וסינון
+      </h3>
+      
+      <div class="filters-grid">
+        <!-- חיפוש לפי שם קובץ -->
+        <div class="filter-group">
+          <label class="filter-label">שם קובץ</label>
+          <input 
+            type="text" 
+            class="filter-input"
+            [(ngModel)]="searchName"
+            (input)="applyFilters()"
+            placeholder="חפש לפי שם קובץ..."
+          />
+        </div>
+
+
+        <!-- סינון לפי תאריך -->
+        <div class="filter-group">
+          <label class="filter-label">תאריך העלאה</label>
+          <input 
+            type="date" 
+            class="filter-input"
+            [(ngModel)]="searchDate"
+            (change)="applyFilters()"
+          />
+        </div>
+
+        <!-- סינון לפי סטטוס -->
+        <div class="filter-group">
+          <label class="filter-label">סטטוס</label>
+          <select 
+            class="filter-select"
+            [(ngModel)]="searchStatus"
+            (change)="applyFilters()"
+          >
+            <option value="">כל הסטטוסים</option>
+            <option [value]="FileStatus.UPLOADED_BY_USER">{{ statusLabels[FileStatus.UPLOADED_BY_USER] }}</option>
+            <option [value]="FileStatus.IN_PROGRESS">{{ statusLabels[FileStatus.IN_PROGRESS] }}</option>
+            <option [value]="FileStatus.COMPLETED">{{ statusLabels[FileStatus.COMPLETED] }}</option>
+            <option [value]="FileStatus.RETURNED_TO_USER">{{ statusLabels[FileStatus.RETURNED_TO_USER] }}</option>
+            <option [value]="FileStatus.SOFT_DELETED">{{ statusLabels[FileStatus.SOFT_DELETED] }}</option>
+          </select>
+        </div>
+
+        <!-- כפתור איפוס סינונים -->
+        <div class="filter-group">
+          <button 
+            class="reset-filters-btn"
+            (click)="resetFilters()"
+            title="איפוס כל הסינונים"
+          >
+            <span class="btn-icon">🔄</span>
+            <span class="btn-text">איפוס</span>
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Pagination Controls - Top -->
+  @if (totalItems > 0) {
+    <div class="pagination-container top-pagination">
+      <div class="pagination-info">
+        <div class="pagination-summary">{{ getCurrentPageInfo() }}</div>
+        <div class="page-size-selector">
+          <span class="items-per-page-text">פריטים בעמוד:</span>
+          <select 
+            [value]="itemsPerPage?.toString() ?? ''"
+            (change)="onItemsPerPageChange($event)"
+          >
+            @for (size of pageSizeOptions; track size) {
+              <option [value]="size">{{ size }}</option>
+            }
+          </select>
+        </div>
+      </div>
+
+      <div class="pagination-controls">
+        <!-- First Page -->
+        <button 
+          class="pagination-btn nav-btn"
+          (click)="goToFirstPage()"
+          [disabled]="isFirstPage()"
+          title="עמוד ראשון"
+        >
+          <span>⏮️</span>
+          <span>ראשון</span>
+        </button>
+
+        <!-- Previous Page -->
+        <button 
+          class="pagination-btn nav-btn"
+          (click)="goToPreviousPage()"
+          [disabled]="isFirstPage()"
+          title="עמוד קודם"
+        >
+          <span>◀️</span>
+          <span>קודם</span>
+        </button>
+
+        <!-- Page Numbers -->
+        @for (pageNum of getPageNumbers(); track pageNum) {
+          @if (pageNum === -1 || pageNum === -2) {
+            <span class="pagination-ellipsis">...</span>
+          } @else {
+            <button 
+              class="pagination-btn"
+              [class.active]="pageNum === currentPage"
+              (click)="goToPage(pageNum)"
+              [title]="'עמוד ' + pageNum"
+            >
+              {{ pageNum }}
+            </button>
+          }
+        }
+
+        <!-- Next Page -->
+        <button 
+          class="pagination-btn nav-btn"
+          (click)="goToNextPage()"
+          [disabled]="isLastPage()"
+          title="עמוד הבא"
+        >
+          <span>הבא</span>
+          <span>▶️</span>
+        </button>
+
+        <!-- Last Page -->
+        <button 
+          class="pagination-btn nav-btn"
+          (click)="goToLastPage()"
+          [disabled]="isLastPage()"
+          title="עמוד אחרון"
+        >
+          <span>אחרון</span>
+          <span>⏭️</span>
+        </button>
+      </div>
+    </div>
+  }
+
+  <div class="table-container">
+    @if (loading) {
+      <div class="loading-state">
+        <div class="loading-spinner-large"></div>
+        <div class="loading-text">טוען נתונים...</div>
+      </div>
+    } @else if (paginatedFiles.length === 0) {
+      <div class="empty-state">
+        <div class="empty-icon">📂</div>
+        @if (filteredFiles.length === 0 && files.length > 0) {
+          <h3>לא נמצאו תוצאות</h3>
+          <p>נסה לשנות את הסינון או החיפוש</p>
+          <button class="reset-filters-btn" (click)="resetFilters()">
+            <span class="btn-icon">🔄</span>
+            <span class="btn-text">איפוס סינונים</span>
+          </button>
+        } @else {
+          <h3>אין קבצים להצגה</h3>
+          <p>התחל בהעלאת הקובץ הראשון שלך</p>
+        }
+      </div>
+    } @else {
+      
+      <!-- תצוגת טבלה -->
+      @if (viewMode === 'table') {
+        <div class="files-table-container">
+          <table class="files-table">
+            <thead>
+              <tr>
+                <th class="table-header sortable" (click)="sortBy('fileName')">
+                  <span class="header-content">
+                    <span class="header-icon">📄</span>
+                    <span class="header-text">שם קובץ</span>
+                    <span class="sort-indicator" 
+                          [class.active]="sortField === 'fileName'"
+                          [class.desc]="sortDirection === 'desc'">
+                      {{ getSortIcon('fileName') }}
+                    </span>
+                  </span>
+                </th>
+                <th class="table-header sortable" (click)="sortBy('clientName')">
+                  <span class="header-content">
+                    <span class="header-icon">👤</span>
+                    <span class="header-text">שם לקוח</span>
+                    <span class="sort-indicator" 
+                          [class.active]="sortField === 'clientName'"
+                          [class.desc]="sortDirection === 'desc'">
+                      {{ getSortIcon('clientName') }}
+                    </span>
+                  </span>
+                </th>
+                <th class="table-header sortable" (click)="sortBy('date')">
+                  <span class="header-content">
+                    <span class="header-icon">📅</span>
+                    <span class="header-text">תאריך העלאה</span>
+                    <span class="sort-indicator" 
+                          [class.active]="sortField === 'date'"
+                          [class.desc]="sortDirection === 'desc'">
+                      {{ getSortIcon('date') }}
+                    </span>
+                  </span>
+                </th>
+                <th class="table-header sortable" (click)="sortBy('size')">
+                  <span class="header-content">
+                    <span class="header-icon">💾</span>
+                    <span class="header-text">גודל</span>
+                    <span class="sort-indicator" 
+                          [class.active]="sortField === 'size'"
+                          [class.desc]="sortDirection === 'desc'">
+                      {{ getSortIcon('size') }}
+                    </span>
+                  </span>
+                </th>
+                <th class="table-header sortable" (click)="sortBy('status')">
+                  <span class="header-content">
+                    <span class="header-icon">📊</span>
+                    <span class="header-text">סטטוס</span>
+                    <span class="sort-indicator" 
+                          [class.active]="sortField === 'status'"
+                          [class.desc]="sortDirection === 'desc'">
+                      {{ getSortIcon('status') }}
+                    </span>
+                  </span>
+                </th>
+                <th class="table-header">
+                  <span class="header-content">
+                    <span class="header-icon">⚙️</span>
+                    <span class="header-text">פעולות</span>
+                  </span>
+                </th>
+              </tr>
+            </thead>
+            <tbody>
+              @for (file of paginatedFiles; track file.id; let i = $index) {
+                <tr class="table-row" 
+                    [style.animation-delay]="(i * 0.1) + 's'"
+                    (click)="openFileDetails(file)">
+                  <td class="table-cell file-name-cell">
+                    <div class="file-name-content">
+                      <span class="file-icon">📄</span>
+                      <span class="file-name-text" [title]="file.name">{{ file.name }}</span>
+                    </div>
+                  </td>
+                  <td class="table-cell">
+                    <span class="client-name" [title]="file.clientName">{{ file.clientName }}</span>
+                  </td>
+                  <td class="table-cell">
+                    <span class="file-date">{{ formatDate(file.createdAt) }}</span>
+                  </td>
+                  <td class="table-cell">
+                    <span class="file-size-badge">{{ formatFileSize(file.size) }}</span>
+                  </td>
+                  <td class="table-cell">
+                    <div class="status-badge" [style.background-color]="statusColors[file.status]">
+                      <span class="status-icon">{{ statusIcons[file.status] }}</span>
+                      <span class="status-text">{{ statusLabels[file.status] }}</span>
+                    </div>
+                  </td>
+                  <td class="table-cell actions-cell" (click)="$event.stopPropagation()">
+                    <div class="table-actions">
+                      @if (canDownloadOriginal(file.status)) {
+                        <button 
+                          class="table-action-btn primary" 
+                          (click)="downloadOriginalFile(file.id, file.name)"
+                          title="הורד מקורי"
+                        >📄</button>
+                      }
+                      
+                      @if (canDownloadProcessed(file.status)) {
+                        <button 
+                          class="table-action-btn success" 
+                          (click)="downloadProcessedFile(file.id, file.name)"
+                          title="הורד מעובד"
+                        >✨</button>
+                      }
+                      
+                      @if (canViewOriginal(file.status)) {
+                        <button 
+                          class="table-action-btn info" 
+                          (click)="viewFile(file.id, 'original')"
+                          title="צפה במקורי"
+                        >🔍</button>
+                      }
+                      
+                      @if (canViewProcessed(file.status)) {
+                        <button 
+                          class="table-action-btn purple" 
+                          (click)="viewFile(file.id, 'processed')"
+                          title="צפה במעובד"
+                        >👀</button>
+                      }
+                      
+                      @if (canDelete(file.status)) {
+                        <button 
+                          class="table-action-btn danger" 
+                          (click)="deleteFile(file.id, file.name)"
+                          title="מחק"
+                        >🗑️</button>
+                      }
+                      
+                      @if (canRestore(file.status)) {
+                        <button 
+                          class="table-action-btn warning" 
+                          (click)="restoreFile(file.id, file.name)"
+                          title="שחזר"
+                        >♻️</button>
+                      }
+                    </div>
+                  </td>
+                </tr>
+              }
+            </tbody>
+          </table>
+        </div>
+      }
+
+      <!-- תצוגת כרטיסים -->
+      @if (viewMode === 'cards') {
+        <div class="files-grid">
+          @for (file of paginatedFiles; track file.id; let i = $index) {
+            <div class="file-card" 
+                 [style.animation-delay]="(i * 0.1) + 's'"
+                 (click)="openFileDetails(file)">
+              <!-- כותרת הכרטיס -->
+              <div class="file-card-header">
+                <div class="file-info">
+                  <div class="file-name-main" [title]="file.name">
+                    {{ file.name }}
+                  </div>
+                  <div class="file-meta">
+                    <span class="file-size-badge">{{ formatFileSize(file.size) }}</span>
+                    <span class="file-date-badge">{{ formatDate(file.createdAt) }}</span>
+                  </div>
+                </div>
+                <div 
+                  class="status-indicator" 
+                  [style.background-color]="statusColors[file.status]"
+                  [title]="statusLabels[file.status]"
+                >
+                  {{ statusIcons[file.status] }}
+                </div>
+              </div>
+
+              <!-- הודעת סטטוס -->
+              <div class="status-message-card" [ngClass]="'status-bg-' + file.status">
+                <div class="status-content">
+                  <span class="status-icon-large">{{ statusIcons[file.status] }}</span>
+                  <div class="status-details">
+                    <div class="status-title">{{ statusLabels[file.status] }}</div>
+                    <div class="status-description">{{ statusMessages[file.status] }}</div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- כפתורי פעולה מתקדמים -->
+              <div class="actions-section" (click)="$event.stopPropagation()">
+                <div class="actions-grid">
+                  
+                  <!-- הורדות -->
+                  <div class="action-group download-group">
+                    <div class="group-title">📥 הורדות</div>
+                    <div class="action-buttons">
+                      @if (canDownloadOriginal(file.status)) {
+                        <button 
+                          class="action-btn primary" 
+                          (click)="downloadOriginalFile(file.id, file.name)"
+                          title="הורד קובץ מקורי"
+                        >
+                          <span class="btn-icon">📄</span>
+                          <span class="btn-text">מקורי</span>
+                        </button>
+                      }
+                      
+                      @if (canDownloadProcessed(file.status)) {
+                        <button 
+                          class="action-btn success" 
+                          (click)="downloadProcessedFile(file.id, file.name)"
+                          title="הורד קובץ מעובד"
+                        >
+                          <span class="btn-icon">✨</span>
+                          <span class="btn-text">מעובד</span>
+                        </button>
+                      }
+                    </div>
+                  </div>
+
+                  <!-- צפייה -->
+                  <div class="action-group view-group">
+                    <div class="group-title">👁️ צפייה</div>
+                    <div class="action-buttons">
+                      @if (canViewOriginal(file.status)) {
+                        <button 
+                          class="action-btn info" 
+                          (click)="viewFile(file.id, 'original')"
+                          title="צפה בקובץ מקורי"
+                        >
+                          <span class="btn-icon">🔍</span>
+                          <span class="btn-text">מקורי</span>
+                        </button>
+                      }
+                      
+                      @if (canViewProcessed(file.status)) {
+                        <button 
+                          class="action-btn purple" 
+                          (click)="viewFile(file.id, 'processed')"
+                          title="צפה בקובץ מעובד"
+                        >
+                          <span class="btn-icon">👀</span>
+                          <span class="btn-text">מעובד</span>
+                        </button>
+                      }
+                    </div>
+                  </div>
+
+                  <!-- ניהול -->
+                  <div class="action-group manage-group">
+                    <div class="group-title">⚙️ ניהול</div>
+                    <div class="action-buttons">
+                      @if (canDelete(file.status)) {
+                        <button 
+                          class="action-btn danger" 
+                          (click)="deleteFile(file.id, file.name)"
+                          title="מחק קובץ"
+                        >
+                          <span class="btn-icon">🗑️</span>
+                          <span class="btn-text">מחק</span>
+                        </button>
+                      }
+                      
+                      @if (canRestore(file.status)) {
+                        <button 
+                          class="action-btn warning" 
+                          (click)="restoreFile(file.id, file.name)"
+                          title="שחזר קובץ"
+                        >
+                          <span class="btn-icon">♻️</span>
+                          <span class="btn-text">שחזר</span>
+                        </button>
+                      }
+                    </div>
+                  </div>
+
+                </div>
+              </div>
+            </div>
+          }
+        </div>
+      }
+    }
+  </div>
+
+  <!-- Pagination Controls - Bottom -->
+  @if (totalItems > 0 && paginatedFiles.length > 0) {
+    <div class="pagination-container bottom-pagination">
+      <div class="pagination-info">
+        <div class="pagination-summary">
+          עמוד {{ currentPage }} מתוך {{ totalPages }}
+        </div>
+      </div>
+
+      <div class="pagination-controls">
+        <!-- First Page -->
+        <button 
+          class="pagination-btn nav-btn"
+          (click)="goToFirstPage()"
+          [disabled]="isFirstPage()"
+          title="עמוד ראשון"
+        >
+          <span>⏮️</span>
+        </button>
+
+        <!-- Previous Page -->
+        <button 
+          class="pagination-btn nav-btn"
+          (click)="goToPreviousPage()"
+          [disabled]="isFirstPage()"
+          title="עמוד קודם"
+        >
+          <span>◀️</span>
+        </button>
+
+        <!-- Page Numbers -->
+        @for (pageNum of getPageNumbers(); track pageNum) {
+          @if (pageNum === -1 || pageNum === -2) {
+            <span class="pagination-ellipsis">...</span>
+          } @else {
+            <button 
+              class="pagination-btn"
+              [class.active]="pageNum === currentPage"
+              (click)="goToPage(pageNum)"
+            >
+              {{ pageNum }}
+            </button>
+          }
+        }
+
+        <!-- Next Page -->
+        <button 
+          class="pagination-btn nav-btn"
+          (click)="goToNextPage()"
+          [disabled]="isLastPage()"
+          title="עמוד הבא"
+        >
+          <span>▶️</span>
+        </button>
+
+        <!-- Last Page -->
+        <button 
+          class="pagination-btn nav-btn"
+          (click)="goToLastPage()"
+          [disabled]="isLastPage()"
+          title="עמוד אחרון"
+        >
+          <span>⏭️</span>
+        </button>
+      </div>
+    </div>
+  }
+</div>
+
+<!-- Modal פרטי קובץ -->
+@if (selectedFileForDetails) {
+  <div class="modal-overlay" (click)="closeFileDetails()">
+    <div class="modal-content file-details-modal" (click)="$event.stopPropagation()">
+      <div class="modal-header">
+        <h2 class="modal-title">
+          <span class="modal-icon">📄</span>
+          פרטי קובץ
+        </h2>
+        <button class="close-modal-btn" (click)="closeFileDetails()">
+          <span>✕</span>
+        </button>
+      </div>
+      
+      <div class="modal-body">
+        <div class="file-details-grid">
+          
+          <!-- מידע בסיסי -->
+          <div class="detail-section">
+            <h3 class="section-title">📋 מידע בסיסי</h3>
+            <div class="details-list">
+              <div class="detail-item">
+                <span class="detail-label">שם קובץ:</span>
+                <span class="detail-value">{{ selectedFileForDetails.name }}</span>
+              </div>
+              <div class="detail-item">
+                <span class="detail-label">שם לקוח:</span>
+                <span class="detail-value">{{ selectedFileForDetails.clientName }}</span>
+              </div>
+              <div class="detail-item">
+                <span class="detail-label">גודל קובץ:</span>
+                <span class="detail-value">{{ formatFileSize(selectedFileForDetails.size) }}</span>
+              </div>
+              <div class="detail-item">
+                <span class="detail-label">תאריך העלאה:</span>
+                <span class="detail-value">{{ formatDate(selectedFileForDetails.createdAt) }}</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- סטטוס -->
+          <div class="detail-section">
+            <h3 class="section-title">📊 סטטוס</h3>
+            <div class="status-display">
+              <div class="status-badge-large" [style.background-color]="statusColors[selectedFileForDetails.status]">
+                <span class="status-icon-xl">{{ statusIcons[selectedFileForDetails.status] }}</span>
+                <div class="status-info">
+                  <div class="status-title-large">{{ statusLabels[selectedFileForDetails.status] }}</div>
+                  <div class="status-description-large">{{ statusMessages[selectedFileForDetails.status] }}</div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- פעולות זמינות -->
+          <div class="detail-section">
+            <h3 class="section-title">⚙️ פעולות זמינות</h3>
+            <div class="modal-actions">
+              @if (canDownloadOriginal(selectedFileForDetails.status)) {
+                <button 
+                  class="modal-action-btn primary" 
+                  (click)="downloadOriginalFile(selectedFileForDetails.id, selectedFileForDetails.name)"
+                >
+                  <span class="btn-icon">📄</span>
+                  <span class="btn-text">הורד קובץ מקורי</span>
+                </button>
+              }
+              
+              @if (canDownloadProcessed(selectedFileForDetails.status)) {
+                <button 
+                  class="modal-action-btn success" 
+                  (click)="downloadProcessedFile(selectedFileForDetails.id, selectedFileForDetails.name)"
+                >
+                  <span class="btn-icon">✨</span>
+                  <span class="btn-text">הורד קובץ מעובד</span>
+                </button>
+              }
+              
+              @if (canViewOriginal(selectedFileForDetails.status)) {
+                <button 
+                  class="modal-action-btn info" 
+                  (click)="viewFile(selectedFileForDetails.id, 'original')"
+                >
+                  <span class="btn-icon">🔍</span>
+                  <span class="btn-text">צפה בקובץ מקורי</span>
+                </button>
+              }
+              
+              @if (canViewProcessed(selectedFileForDetails.status)) {
+                <button 
+                  class="modal-action-btn purple" 
+                  (click)="viewFile(selectedFileForDetails.id, 'processed')"
+                >
+                  <span class="btn-icon">👀</span>
+                  <span class="btn-text">צפה בקובץ מעובד</span>
+                </button>
+              }
+              
+              @if (canDelete(selectedFileForDetails.status)) {
+                <button 
+                  class="modal-action-btn danger" 
+                  (click)="deleteFile(selectedFileForDetails.id, selectedFileForDetails.name)"
+                >
+                  <span class="btn-icon">🗑️</span>
+                  <span class="btn-text">מחק קובץ</span>
+                </button>
+              }
+              
+              @if (canRestore(selectedFileForDetails.status)) {
+                <button 
+                  class="modal-action-btn warning" 
+                  (click)="restoreFile(selectedFileForDetails.id, selectedFileForDetails.name)"
+                >
+                  <span class="btn-icon">♻️</span>
+                  <span class="btn-text">שחזר קובץ</span>
+                </button>
+              }
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </div>
+  </div>
+}
