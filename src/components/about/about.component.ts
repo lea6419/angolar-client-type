@@ -10,12 +10,10 @@ import { isPlatformBrowser } from '@angular/common';
 })
 export class AboutComponent implements OnInit {
 
-  constructor(@Inject(PLATFORM_ID) private platformId: Object) { }
+  constructor() { }
 
   ngOnInit(): void {
-    if (isPlatformBrowser(this.platformId)) {
-      this.initFaqToggle();
-    }
+   
   }
 
   initFaqToggle(): void {
