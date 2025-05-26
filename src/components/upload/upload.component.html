@@ -1,0 +1,116 @@
+<div class="upload-container">
+    <div class="upload-header">
+      <h2>העלאת קבצים</h2>
+      <p>גרור קבצים לכאן או לחץ לבחירה ידנית</p>
+    </div>
+  
+    <div class="upload-content">
+      <!-- Upload Zone -->
+      <div 
+        class="upload-zone" 
+        [class.dragging]="isDragging"
+        (dragover)="onDragOver($event)"
+        (dragleave)="onDragLeave($event)"
+        (drop)="onDrop($event)"
+        (click)="openFileSelector()">
+        
+        <div class="upload-icon">📁</div>
+        <div class="upload-text">גרור קבצים לכאן</div>
+        <div class="upload-subtext">או לחץ כדי לבחור קבצים מהמחשב</div>
+        <button class="upload-button" type="button">
+          בחר קבצים
+        </button>
+        
+        <input 
+          #fileInput
+          type="file" 
+          class="file-input" 
+          [multiple]="multiple"
+          [accept]="acceptedTypes.join(',')"
+          (change)="onFileInputChange($event)">
+      </div>
+  
+      <!-- Files List -->
+      <div class="files-list" *ngIf="uploadedFiles.length > 0">
+        <div class="files-header">
+          <div class="files-title">קבצים שנבחרו</div>
+          <div class="files-count">{{ uploadedFiles.length }} קבצים</div>
+        </div>
+        
+        <div class="files-container">
+          <div class="file-item" *ngFor="let file of uploadedFiles; trackBy: trackByFileId">
+            <div class="file-icon">{{ getFileIcon(file.type) }}</div>
+            
+            <img 
+              *ngIf="file.preview" 
+              [src]="file.preview" 
+              class="file-preview" 
+              alt="תמונה מקדימה">
+            
+            <div class="file-info">
+              <div class="file-name">{{ file.name }}</div>
+              <div class="file-details">
+                <span>{{ formatFileSize(file.size) }}</span>
+                <span class="status-badge" [ngClass]="'status-' + file.status">
+                  {{ getStatusText(file.status) }}
+                </span>
+              </div>
+            </div>
+            
+            <div class="file-actions">
+              <button 
+                class="action-button remove-button" 
+                type="button"
+                (click)="removeFile(file.id)">
+                🗑️
+              </button>
+            </div>
+            
+            <div 
+              *ngIf="file.status === 'uploading' || file.status === 'completed'"
+              class="progress-bar" 
+              [style.width.%]="file.progress">
+            </div>
+          </div>
+        </div>
+      </div>
+  
+      <!-- Upload Stats -->
+      <div class="upload-stats" *ngIf="uploadedFiles.length > 0">
+        <div class="stat-item">
+          <div class="stat-value">{{ uploadedFiles.length }}</div>
+          <div class="stat-label">סה"כ קבצים</div>
+        </div>
+        <div class="stat-item">
+          <div class="stat-value">{{ formatFileSize(totalSize) }}</div>
+          <div class="stat-label">גודל כולל</div>
+        </div>
+        <div class="stat-item">
+          <div class="stat-value">{{ completedFiles.length }}</div>
+          <div class="stat-label">הועלו בהצלחה</div>
+        </div>
+      </div>
+  
+      <!-- Upload Actions -->
+      <div class="upload-actions" *ngIf="uploadedFiles.length > 0">
+        <button 
+          class="secondary-button" 
+          type="button"
+          (click)="clearAllFiles()">
+          נקה הכל
+        </button>
+        <button 
+          class="primary-button" 
+          type="button"
+          [disabled]="!canUpload"
+          (click)="uploadAllFiles()">
+          {{ hasPendingFiles() ? 'העלה קבצים' : 'כל הקבצים הועלו' }}
+        </button>
+      </div>
+  
+      <!-- Error Messages -->
+      <div class="error-message" *ngFor="let error of errorMessages">
+        {{ error }}
+      </div>
+    </div>
+  </div>

@@ -108,7 +108,7 @@
         <div class="page-size-selector">
           <span class="items-per-page-text">פריטים בעמוד:</span>
           <select 
-            [value]="itemsPerPage?.toString() ?? ''"
+            [value]="itemsPerPage"
             (change)="onItemsPerPageChange($event)"
           >
             @for (size of pageSizeOptions; track size) {
