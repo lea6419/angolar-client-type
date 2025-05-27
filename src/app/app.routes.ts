@@ -15,7 +15,7 @@ export const routes: Routes = [
   { path: 'files', component: FileManagementComponent, canActivate: [AuthGuard] },
   { path: 'upload', component: FileUploadComponent, canActivate: [AuthGuard] },
   { path: '', redirectTo: '/home', pathMatch: 'full' },
-  { path: 'aboat', component: AboutComponent }
+  { path: 'aboaut', component: AboutComponent }
 ];
 
 @NgModule({
