@@ -1,0 +1,226 @@
+// src/styles/variables.scss - הגדרת צבעים גנריים
+:root {
+    // צבעים ראשיים
+    --primary-color: #3a0ca3;
+    --primary-light: #5d1dd4;
+    --primary-dark: #2b0a7a;
+    
+    // צבעים משניים  
+    --secondary-color: #7209b7;
+    --secondary-light: #9c4dd6;
+    --secondary-dark: #550694;
+    
+    // צבעי אקסנט
+    --accent-color: #ff6b35;
+    --accent-light: #ff8962;
+    --accent-dark: #cc5529;
+    
+    // צבעי רקע
+    --background-primary: #ffffff;
+    --background-secondary: #f8f9fa;
+    --background-tertiary: #e9ecef;
+    
+    // צבעי טקסט
+    --text-primary: #212529;
+    --text-secondary: #6c757d;
+    --text-light: #adb5bd;
+    --text-white: #ffffff;
+    
+    // צבעי גבולות וצללים
+    --border-color: #dee2e6;
+    --shadow-light: rgba(0, 0, 0, 0.1);
+    --shadow-medium: rgba(0, 0, 0, 0.15);
+    --shadow-heavy: rgba(0, 0, 0, 0.25);
+    
+    // צבעי מצב
+    --success-color: #28a745;
+    --warning-color: #ffc107;
+    --error-color: #dc3545;
+    --info-color: #17a2b8;
+    
+    // גרדיאנטים
+    --gradient-primary: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+    --gradient-accent: linear-gradient(135deg, var(--accent-color), var(--accent-light));
+  }
+  
+  // src/styles/mixins.scss - מיקסינים לשימוש חוזר
+  @mixin button-style($bg-color, $text-color: var(--text-white), $hover-color: null) {
+    background-color: $bg-color;
+    color: $text-color;
+    border: none;
+    padding: 0.75rem 1.5rem;
+    border-radius: 8px;
+    cursor: pointer;
+    font-weight: 500;
+    transition: all 0.3s ease;
+    
+    &:hover {
+      @if $hover-color {
+        background-color: $hover-color;
+      } @else {
+        filter: brightness(1.1);
+      }
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px var(--shadow-medium);
+    }
+  }
+  
+  @mixin card-style {
+    background-color: var(--background-primary);
+    border-radius: 12px;
+    box-shadow: 0 2px 8px var(--shadow-light);
+    padding: 1.5rem;
+    border: 1px solid var(--border-color);
+    transition: box-shadow 0.3s ease;
+    
+    &:hover {
+      box-shadow: 0 4px 16px var(--shadow-medium);
+    }
+  }
+  
+  // src/styles/components.scss - סגנונות רכיבים גנריים
+  .btn {
+    &-primary {
+      @include button-style(var(--primary-color));
+    }
+    
+    &-secondary {
+      @include button-style(var(--secondary-color));
+    }
+    
+    &-accent {
+      @include button-style(var(--accent-color));
+    }
+    
+    &-outline {
+      @include button-style(transparent, var(--primary-color));
+      border: 2px solid var(--primary-color);
+      
+      &:hover {
+        background-color: var(--primary-color);
+        color: var(--text-white);
+      }
+    }
+  }
+  
+  .card {
+    @include card-style;
+  }
+  
+  // הקוד המעודכן שלך עם הצבעים החדשים
+  .home-container {
+    min-height: 100vh;
+    background: linear-gradient(135deg, var(--background-secondary) 0%, var(--background-tertiary) 100%);
+    
+    header {
+      text-align: center;
+      padding: 4rem 2rem;
+      background: var(--gradient-primary);
+      color: var(--text-white);
+      
+      h1 {
+        font-size: 2.5rem;
+        margin-bottom: 1rem;
+        font-weight: 700;
+      }
+      
+      p {
+        font-size: 1.2rem;
+        opacity: 0.9;
+      }
+    }
+    
+    .features {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 2rem;
+      padding: 4rem 2rem;
+      max-width: 1200px;
+      margin: 0 auto;
+      
+      .feature {
+        @include card-style;
+        text-align: center;
+        
+        h3 {
+          color: var(--primary-color);
+          font-size: 1.5rem;
+          margin-bottom: 1rem;
+        }
+        
+        p {
+          color: var(--text-secondary);
+          line-height: 1.6;
+        }
+      }
+    }
+    
+    footer {
+      background-color: var(--primary-dark);
+      color: var(--text-white);
+      text-align: center;
+      padding: 2rem;
+      margin-top: auto;
+    }
+  }
+  
+  .main-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1rem 2rem;
+    background: var(--gradient-primary);
+    color: var(--text-white);
+    box-shadow: 0 2px 12px var(--shadow-medium);
+    
+    .logo h1 {
+      font-size: 1.8rem;
+      font-weight: 700;
+    }
+    
+    .navigation {
+      display: flex;
+      gap: 2rem;
+      
+      .nav-link {
+        text-decoration: none;
+        color: var(--text-white);
+        font-size: 1.1rem;
+        font-weight: 500;
+        transition: all 0.3s ease;
+        position: relative;
+        
+        &:hover {
+          color: var(--accent-color);
+          transform: translateY(-2px);
+        }
+        
+        &::after {
+          content: '';
+          position: absolute;
+          bottom: -5px;
+          left: 0;
+          width: 0;
+          height: 2px;
+          background-color: var(--accent-color);
+          transition: width 0.3s ease;
+        }
+        
+        &:hover::after {
+          width: 100%;
+        }
+      }
+    }
+    
+    .auth-buttons {
+      display: flex;
+      gap: 1rem;
+      
+      .btn {
+        @include button-style(rgba(255, 255, 255, 0.2), var(--text-white), var(--accent-color));
+        border: 1px solid rgba(255, 255, 255, 0.3);
+        backdrop-filter: blur(10px);
+      }
+    }
+  }
+  

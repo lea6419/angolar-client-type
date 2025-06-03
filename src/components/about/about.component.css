@@ -1,639 +1,142 @@
-/* === משתנים וצבעים === */
-:root {
-    --primary-color: #4361ee;
-    --primary-light: #4895ef;
-    --primary-dark: #3a0ca3;
-    --accent-color: #f72585;
-    --text-color: #2b2d42;
-    --text-light: #8d99ae;
-    --background-color: #f8f9fa;
-    --card-color: #ffffff;
-    --shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
-    --transition: all 0.3s ease;
-  }
-  
-  /* === סגנונות כלליים === */
-  .about-container {
-    font-family: 'Rubik', sans-serif;
-    color: var(--text-color);
-    background-color: var(--background-color);
-    direction: rtl;
-    padding-bottom: 4rem;
-  }
-  
-  section {
-    margin-bottom: 4rem;
-  }
-  
-  h1, h2, h3, h4, h5, h6 {
-    font-weight: 700;
-    margin-top: 0;
-  }
-  
-  p {
-    line-height: 1.7;
-    margin-bottom: 1rem;
-  }
-  
-  /* === כותרת ראשית (Hero Section) === */
-  .hero-section {
-    background: linear-gradient(135deg, var(--primary-dark), var(--primary-color));
-    color: white;
-    padding: 6rem 2rem;
-    text-align: center;
-    position: relative;
-    overflow: hidden;
-    border-radius: 0 0 50% 50% / 20px;
-  }
-  
-  .hero-section::before {
-    content: "";
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background-image: url("data:image/svg+xml,%3Csvg width='100' height='100' viewBox='0 0 100 100' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M11 18c3.866 0 7-3.134 7-7s-3.134-7-7-7-7 3.134-7 7 3.134 7 7 7zm48 25c3.866 0 7-3.134 7-7s-3.134-7-7-7-7 3.134-7 7 3.134 7 7 7zm-43-7c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zm63 31c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zM34 90c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zm56-76c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zM12 86c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm28-65c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm23-11c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zm-6 60c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm29 22c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zM32 63c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zm57-13c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5z' fill='%23ffffff' fill-opacity='0.1' fill-rule='evenodd'/%3E%3C/svg%3E");
-    opacity: 0.5;
-  }
-  
-  .hero-content {
-    max-width: 800px;
-    margin: 0 auto;
-    position: relative;
-    z-index: 1;
-  }
-  
-  .hero-title {
-    font-size: 3rem;
-    margin-bottom: 1.5rem;
-    animation: fadeInDown 1s ease;
-  }
-  
-  .hero-subtitle {
-    font-size: 1.2rem;
-    margin-bottom: 2rem;
-    opacity: 0.9;
-    animation: fadeInUp 1s ease 0.3s both;
-  }
-  
-  .hero-image {
-    margin-top: 3rem;
-    animation: fadeIn 1s ease 0.6s both;
-  }
-  
-  /* אנימציית הקלדה */
-  .typing-animation {
-    display: inline-flex;
-    flex-direction: column;
-    align-items: center;
-    background-color: rgba(255, 255, 255, 0.1);
-    padding: 2rem;
-    border-radius: 16px;
-    backdrop-filter: blur(5px);
-    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
-  }
-  
-  .typing-icon {
-    font-size: 3rem;
-    margin-bottom: 1rem;
-    animation: pulse 2s infinite;
-  }
-  
-  .typing-text {
-    display: flex;
-    align-items: center;
-    font-size: 1.2rem;
-  }
-  
-  .typing-arrow {
-    margin: 0 1rem;
-    animation: arrowMove 1.5s infinite;
-  }
-  
-  .highlight {
-    color: var(--accent-color);
-    font-weight: bold;
-  }
-  
-  /* === כותרות סקשנים === */
-  .section-header {
-    display: flex;
-    align-items: center;
-    margin-bottom: 2rem;
-  }
-  
-  .section-icon {
-    width: 50px;
-    height: 50px;
-    background: linear-gradient(135deg, var(--primary-light), var(--primary-color));
-    border-radius: 50%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    margin-left: 1rem;
-    color: white;
-    font-size: 1.5rem;
-    box-shadow: 0 5px 15px rgba(67, 97, 238, 0.3);
-  }
-  
-  .section-header h2 {
-    font-size: 2rem;
-    color: var(--primary-dark);
-    position: relative;
-  }
-  
-  .section-header h2::after {
-    content: "";
-    position: absolute;
-    bottom: -10px;
-    right: 0;
-    width: 50px;
-    height: 3px;
-    background-color: var(--accent-color);
-  }
-  
-  /* === סקשן תוכן === */
-  .content-section {
-    padding: 2rem;
-    max-width: 1200px;
-    margin: 0 auto;
-  }
-  
-  .section-content {
-    background-color: var(--card-color);
-    padding: 2rem;
-    border-radius: 16px;
-    box-shadow: var(--shadow);
-  }
-  
-  /* === סקשן יתרונות === */
-  .benefits-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-    gap: 2rem;
-  }
-  
-  .benefit-card {
-    background-color: var(--card-color);
-    padding: 2rem;
-    border-radius: 16px;
-    box-shadow: var(--shadow);
-    transition: var(--transition);
-    text-align: center;
-  }
-  
-  .benefit-card:hover {
-    transform: translateY(-10px);
-    box-shadow: 0 15px 30px rgba(0, 0, 0, 0.1);
-  }
-  
-  .benefit-icon {
-    width: 70px;
-    height: 70px;
-    background: linear-gradient(135deg, var(--primary-light), var(--primary-color));
-    border-radius: 50%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    margin: 0 auto 1.5rem;
-    color: white;
-    font-size: 1.8rem;
-  }
-  
-  .benefit-card h3 {
-    font-size: 1.4rem;
-    margin-bottom: 1rem;
-    color: var(--primary-dark);
-  }
-  
-  /* === סקשן תהליך === */
-  .process-steps {
-    position: relative;
-  }
-  
-  .process-steps::before {
-    content: "";
-    position: absolute;
-    top: 0;
-    bottom: 0;
-    right: 25px;
-    width: 3px;
-    background-color: var(--primary-light);
-    opacity: 0.3;
-  }
-  
-  .process-step {
-    display: flex;
-    margin-bottom: 2rem;
-    position: relative;
-  }
-  
-  .step-number {
-    width: 50px;
-    height: 50px;
-    background: linear-gradient(135deg, var(--primary-light), var(--primary-color));
-    border-radius: 50%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    color: white;
-    font-weight: bold;
-    font-size: 1.2rem;
-    margin-left: 2rem;
-    position: relative;
-    z-index: 1;
-    box-shadow: 0 5px 15px rgba(67, 97, 238, 0.3);
-  }
-  
-  .step-content {
-    background-color: var(--card-color);
-    padding: 1.5rem;
-    border-radius: 16px;
-    box-shadow: var(--shadow);
-    flex: 1;
-  }
-  
-  .step-content h3 {
-    font-size: 1.3rem;
-    margin-bottom: 0.5rem;
-    color: var(--primary-dark);
-  }
-  
-  /* === סקשן צוות === */
-  .team-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-    gap: 2rem;
-  }
-  
-  .team-member {
-    background-color: var(--card-color);
-    padding: 2rem;
-    border-radius: 16px;
-    box-shadow: var(--shadow);
-    text-align: center;
-    transition: var(--transition);
-  }
-  
-  .team-member:hover {
-    transform: translateY(-10px);
-    box-shadow: 0 15px 30px rgba(0, 0, 0, 0.1);
-  }
-  
-  .member-image {
-    width: 150px;
-    height: 150px;
-    border-radius: 50%;
-    overflow: hidden;
-    margin: 0 auto 1.5rem;
-    border: 5px solid rgba(67, 97, 238, 0.1);
-  }
-  
-  .member-image img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-  }
-  
-  .team-member h3 {
-    font-size: 1.3rem;
-    margin-bottom: 0.5rem;
-    color: var(--primary-dark);
-  }
-  
-  .member-title {
-    color: var(--accent-color);
-    font-weight: 500;
-    margin-bottom: 1rem;
-  }
-  
-  .member-description {
-    color: var(--text-light);
-    font-size: 0.9rem;
-  }
-  
-  /* === סקשן שאלות נפוצות === */
-  .faq-list {
-    background-color: var(--card-color);
-    border-radius: 16px;
-    box-shadow: var(--shadow);
-    overflow: hidden;
-  }
-  
-  .faq-item {
-    border-bottom: 1px solid rgba(0, 0, 0, 0.05);
-  }
-  
-  .faq-item:last-child {
-    border-bottom: none;
-  }
-  
-  .faq-question {
-    padding: 1.5rem;
-    display: flex;
-    align-items: center;
-    cursor: pointer;
-    transition: var(--transition);
-  }
-  
-  .faq-question:hover {
-    background-color: rgba(67, 97, 238, 0.05);
-  }
-  
-  .faq-question i {
-    margin-left: 1rem;
-    color: var(--primary-color);
-    transition: var(--transition);
-  }
-  
-  .faq-question h3 {
-    margin: 0;
-    font-size: 1.1rem;
-  }
-  
-  .faq-answer {
-    padding: 0 1.5rem 1.5rem;
-    color: var(--text-light);
-    display: none;
-  }
-  
-  .faq-item.active .faq-question i {
-    transform: rotate(45deg);
-  }
-  
-  .faq-item.active .faq-answer {
-    display: block;
-  }
-  
-  /* === סקשן צור קשר === */
-  .contact-content {
-    display: grid;
-    grid-template-columns: 1fr 2fr;
-    gap: 2rem;
-  }
-  
-  .contact-info {
-    background-color: var(--card-color);
-    padding: 2rem;
-    border-radius: 16px;
-    box-shadow: var(--shadow);
-  }
-  
-  .contact-item {
-    display: flex;
-    align-items: center;
-    margin-bottom: 1.5rem;
-  }
-  
-  .contact-item i {
-    width: 40px;
-    height: 40px;
-    background-color: rgba(67, 97, 238, 0.1);
-    border-radius: 50%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    color: var(--primary-color);
-    margin-left: 1rem;
-  }
-  
-  .contact-form {
-    background-color: var(--card-color);
-    padding: 2rem;
-    border-radius: 16px;
-    box-shadow: var(--shadow);
-  }
-  
-  .contact-form h3 {
-    margin-bottom: 1.5rem;
-    color: var(--primary-dark);
-  }
-  
-  .form-group {
-    margin-bottom: 1.5rem;
-  }
-  
-  .form-group label {
-    display: block;
-    margin-bottom: 0.5rem;
-    font-weight: 500;
-  }
-  
-  .form-group input,
-  .form-group textarea {
-    width: 100%;
-    padding: 0.8rem 1rem;
-    border: 1px solid #e2e8f0;
-    border-radius: 8px;
-    font-size: 1rem;
-    transition: var(--transition);
-  }
-  
-  .form-group input:focus,
-  .form-group textarea:focus {
-    outline: none;
-    border-color: var(--primary-light);
-    box-shadow: 0 0 0 3px rgba(72, 149, 239, 0.2);
-  }
-  
-  .submit-btn {
-    background-color: var(--primary-color);
-    color: white;
-    border: none;
-    padding: 0.8rem 2rem;
-    border-radius: 8px;
-    font-size: 1rem;
-    font-weight: 500;
-    cursor: pointer;
-    transition: var(--transition);
-  }
-  
-  .submit-btn:hover {
-    background-color: var(--primary-dark);
-    transform: translateY(-3px);
-    box-shadow: 0 5px 15px rgba(67, 97, 238, 0.3);
-  }
-  
-  /* === קריאה לפעולה === */
-  .cta-section {
-    background: linear-gradient(135deg, var(--primary-color), var(--primary-dark));
-    color: white;
-    padding: 4rem 2rem;
-    text-align: center;
-    border-radius: 16px;
-    margin: 0 2rem 2rem;
-    position: relative;
-    overflow: hidden;
-  }
-  
-  .cta-section::before {
-    content: "";
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background-image: url("data:image/svg+xml,%3Csvg width='100' height='100' viewBox='0 0 100 100' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M11 18c3.866 0 7-3.134 7-7s-3.134-7-7-7-7 3.134-7 7 3.134 7 7 7zm48 25c3.866 0 7-3.134 7-7s-3.134-7-7-7-7 3.134-7 7 3.134 7 7 7zm-43-7c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zm63 31c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zM34 90c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zm56-76c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zM12 86c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm28-65c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm23-11c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zm-6 60c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm29 22c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zM32 63c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zm57-13c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5z' fill='%23ffffff' fill-opacity='0.1' fill-rule='evenodd'/%3E%3C/svg%3E");
-    opacity: 0.5;
-  }
-  
-  .cta-content {
-    position: relative;
-    z-index: 1;
-    max-width: 800px;
-    margin: 0 auto;
-  }
-  
-  .cta-section h2 {
-    font-size: 2.5rem;
-    margin-bottom: 1rem;
-  }
-  
-  .cta-section p {
-    font-size: 1.2rem;
-    margin-bottom: 2rem;
-    opacity: 0.9;
-  }
-  
-  .cta-button {
-    background-color: white;
-    color: var(--primary-color);
-    border: none;
-    padding: 1rem 2.5rem;
-    border-radius: 50px;
-    font-size: 1.1rem;
-    font-weight: 600;
-    cursor: pointer;
-    transition: var(--transition);
-    box-shadow: 0 5px 20px rgba(0, 0, 0, 0.2);
-  }
-  
-  .cta-button:hover {
-    transform: translateY(-5px);
-    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
-  }
-  
-  /* === אנימציות === */
-  @keyframes fadeInDown {
-    from {
-      opacity: 0;
-      transform: translateY(-20px);
-    }
-    to {
-      opacity: 1;
-      transform: translateY(0);
-    }
-  }
-  
-  @keyframes fadeInUp {
-    from {
-      opacity: 0;
-      transform: translateY(20px);
-    }
-    to {
-      opacity: 1;
-      transform: translateY(0);
-    }
-  }
-  
-  @keyframes fadeIn {
-    from {
-      opacity: 0;
-    }
-    to {
-      opacity: 1;
-    }
-  }
-  
-  @keyframes pulse {
-    0% {
-      transform: scale(1);
-    }
-    50% {
-      transform: scale(1.1);
-    }
-    100% {
-      transform: scale(1);
-    }
-  }
-  
-  @keyframes arrowMove {
-    0% {
-      transform: translateX(0);
-    }
-    50% {
-      transform: translateX(-5px);
-    }
-    100% {
-      transform: translateX(0);
-    }
-  }
-  
-  /* === רספונסיביות === */
-  @media (max-width: 992px) {
-    .contact-content {
-      grid-template-columns: 1fr;
-    }
-  }
-  
-  @media (max-width: 768px) {
-    .hero-title {
-      font-size: 2.2rem;
-    }
-    
-    .section-header h2 {
-      font-size: 1.8rem;
-    }
-    
-    .process-steps::before {
-      right: 25px;
-    }
-    
-    .cta-section h2 {
-      font-size: 2rem;
-    }
-  }
-  
-  @media (max-width: 576px) {
-    .hero-section {
-      padding: 4rem 1rem;
-    }
-    
-    .content-section {
-      padding: 1rem;
-    }
-    
-    .hero-title {
-      font-size: 1.8rem;
-    }
-    
-    .hero-subtitle {
-      font-size: 1rem;
-    }
-    
-    .typing-animation {
-      padding: 1.5rem;
-    }
-    
-    .typing-icon {
-      font-size: 2.5rem;
-    }
-    
-    .typing-text {
-      font-size: 1rem;
-    }
-    
-    .section-header h2 {
-      font-size: 1.5rem;
-    }
-    
-    .cta-section {
-      margin: 0 1rem 1rem;
-      padding: 3rem 1rem;
-    }
-    
-    .cta-section h2 {
-      font-size: 1.8rem;
-    }
-  }
+.about-hero {
+  /* background: linear-gradient(to right, #dbeafe, #6366f1); */
+  color: rgb(16, 15, 15);
+  padding: 4rem 2rem;
+  text-align: center;
+  border-radius: 1rem;
+}
+.about-hero h1 {
+  font-size: 2.5rem;
+  margin-bottom: 0.5rem;
+}
+.about-hero p {
+  font-size: 1.2rem;
+  max-width: 600px;
+  margin: 0 auto;
+  opacity: 0.9;
+}
+
+.about-section {
+  padding: 3rem 2rem;
+  max-width: 1200px;
+  margin: auto;
+}
+.about-section.alt {
+  background-color: #f9fafb;
+  border-radius: 1rem;
+}
+.about-section h2 {
+  font-size: 2rem;
+  margin-bottom: 1.5rem;
+  text-align: center;
+}
+
+.feature-cards {
+  display: grid;
+  gap: 1.5rem;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+}
+.card {
+  background: #f3f4f6;
+  padding: 1.5rem;
+  border-radius: 1rem;
+  box-shadow: 0 0 10px rgba(0,0,0,0.05);
+  transition: 0.3s;
+}
+.card:hover {
+  transform: translateY(-5px);
+  background-color: #e0e7ff;
+}
+
+.benefits-list {
+  list-style: none;
+  padding: 0;
+  display: grid;
+  gap: 1rem;
+  direction: rtl;
+  font-size: 1.1rem;
+  line-height: 1.8;
+}
+.benefits-list li::before {
+  content: "✔️ ";
+}
+
+.faq-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 1.5rem;
+  margin-top: 1rem;
+}
+.faq-item {
+  background: #f1f5f9;
+  padding: 1.5rem;
+  border-radius: 1rem;
+  transition: 0.3s;
+}
+.faq-item:hover {
+  background-color: #dbeafe;
+}
+.faq-item h4 {
+  margin-bottom: 0.5rem;
+  color: #1e40af;
+}
+.faq-item p {
+  margin: 0;
+  opacity: 0.8;
+}.faq-section {
+  max-width: 1000px;
+  margin: auto;
+  padding: 3rem 2rem;
+  direction: rtl;
+}
+.faq-section h2 {
+  text-align: center;
+  font-size: 2.2rem;
+  margin-bottom: 2rem;
+  color: #1e3a8a;
+}
+.icon {
+  font-size: 2rem;
+  margin-left: 0.5rem;
+}
+
+.faq-item {
+  background: #f8fafc;
+  border-radius: 1rem;
+  margin-bottom: 1.5rem;
+  padding: 1rem 1.5rem;
+  box-shadow: 0 4px 8px rgba(0,0,0,0.05);
+  cursor: pointer;
+  transition: background 0.3s ease;
+}
+.faq-item:hover {
+  background: #eff6ff;
+}
+
+.faq-question {
+  font-weight: bold;
+  font-size: 1.2rem;
+  display: flex;
+  align-items: center;
+  color: #0f172a;
+}
+.faq-icon {
+  margin-left: 0.75rem;
+  font-size: 1.5rem;
+}
+
+.faq-answer {
+  margin-top: 0.8rem;
+  font-size: 1rem;
+  color: #475569;
+  opacity: 0;
+  max-height: 0;
+  overflow: hidden;
+  transition: all 0.4s ease;
+}
+
+/* Toggle effect with :focus */
+.faq-item:focus .faq-answer {
+  opacity: 1;
+  max-height: 300px;
+}

@@ -23,95 +23,210 @@
     <mat-card class="auth-card">
       <mat-card-header class="card-header">
         <div class="header-icon">✨</div>
-        <mat-card-title class="card-title">יצירת חשבון חדש</mat-card-title>
+        <mat-card-title class="card-title">
+          @if (currentStep === 'form') {
+            יצירת חשבון חדש
+          } @else if (currentStep === 'email-verification') {
+            אימות כתובת מייל
+          } @else {
+            רישום הושלם
+          }
+        </mat-card-title>
         <mat-card-subtitle class="card-subtitle">
-          המר את הקבצים שלך לטקסט בקלות
+          @if (currentStep === 'form') {
+            המר את הקבצים שלך לטקסט בקלות
+          } @else if (currentStep === 'email-verification') {
+            הזן את הקוד שנשלח למייל שלך
+          } @else {
+            ברוך הבא למערכת!
+          }
         </mat-card-subtitle>
       </mat-card-header>
 
       <mat-card-content class="card-content">
-        <form class="auth-form" (ngSubmit)="onRegister()">
-          <!-- שגיאה -->
-          <div class="error-message" *ngIf="errorMessage">
+        
+        <!-- הודעות -->
+        @if (errorMessage) {
+          <div class="error-message">
             <mat-icon class="error-icon">error</mat-icon>
             {{ errorMessage }}
           </div>
+        }
+        
+        @if (successMessage) {
+          <div class="success-message">
+            <mat-icon class="success-icon">check_circle</mat-icon>
+            {{ successMessage }}
+          </div>
+        }
 
-          <!-- שם מלא -->
-          <mat-form-field class="form-field" appearance="outline">
-            <mat-label>שם מלא</mat-label>
-            <input 
-              matInput 
-              [(ngModel)]="form.name" 
-              name="name"
-              required
-              placeholder="הכנס שם מלא"
+        <!-- שלב 1: טופס רישום -->
+        @if (currentStep === 'form') {
+          <form class="auth-form" (ngSubmit)="onRegister()">
+            <!-- שם מלא -->
+            <mat-form-field class="form-field" appearance="outline">
+              <mat-label>שם מלא</mat-label>
+              <input 
+                matInput 
+                [(ngModel)]="form.name" 
+                name="name"
+                required
+                placeholder="הכנס שם מלא"
+              >
+              <mat-icon matSuffix class="field-icon">person</mat-icon>
+            </mat-form-field>
+
+            <!-- אימייל -->
+            <mat-form-field class="form-field" appearance="outline">
+              <mat-label>כתובת אימייל</mat-label>
+              <input 
+                matInput 
+                type="email"
+                [(ngModel)]="form.email" 
+                name="email"
+                required
+                placeholder="example@email.com"
+              >
+              <mat-icon matSuffix class="field-icon">email</mat-icon>
+            </mat-form-field>
+
+            <!-- סיסמה -->
+            <mat-form-field class="form-field" appearance="outline">
+              <mat-label>סיסמה</mat-label>
+              <input 
+                matInput 
+                type="password"
+                [(ngModel)]="form.password" 
+                name="password"
+                required
+                placeholder="לפחות 6 תווים, אות גדולה וספרה"
+              >
+              <mat-icon matSuffix class="field-icon">lock</mat-icon>
+            </mat-form-field>
+
+            <!-- אימות סיסמה -->
+            <mat-form-field class="form-field" appearance="outline">
+              <mat-label>אימות סיסמה</mat-label>
+              <input 
+                matInput 
+                type="password"
+                [(ngModel)]="form.confirmPassword" 
+                name="confirmPassword"
+                required
+                placeholder="הכנס סיסמה שוב"
+              >
+              <mat-icon matSuffix class="field-icon">lock_clock</mat-icon>
+            </mat-form-field>
+
+            <!-- כפתור שליחת קוד אימות -->
+            <button 
+              mat-raised-button 
+              type="submit" 
+              class="auth-button register-button"
+              [disabled]="!form.name || !form.email || !form.password || !form.confirmPassword || isLoading"
             >
-            <mat-icon matSuffix class="field-icon">person</mat-icon>
-          </mat-form-field>
+              @if (!isLoading) {
+                <mat-icon class="button-icon">email</mat-icon>
+              } @else {
+                <mat-spinner diameter="20"></mat-spinner>
+              }
+              <span>{{ isLoading ? 'שולח קוד אימות...' : 'שלח קוד אימות למייל' }}</span>
+              <div class="button-ripple"></div>
+            </button>
+          </form>
+        }
 
-          <!-- אימייל -->
-          <mat-form-field class="form-field" appearance="outline">
-            <mat-label>כתובת אימייל</mat-label>
-            <input 
-              matInput 
-              type="email"
-              [(ngModel)]="form.email" 
-              name="email"
-              required
-              placeholder="example@email.com"
-            >
-            <mat-icon matSuffix class="field-icon">email</mat-icon>
-          </mat-form-field>
+        <!-- שלב 2: אימות מייל -->
+        @if (currentStep === 'email-verification') {
+          <form class="auth-form" (ngSubmit)="verifyEmailCode()">
+            <div class="verification-info">
+              <mat-icon class="info-icon">info</mat-icon>
+              <p>שלחנו קוד אימות בן 6 ספרות לכתובת: <strong>{{ form.email }}</strong></p>
+            </div>
 
-          <!-- סיסמה -->
-          <mat-form-field class="form-field" appearance="outline">
-            <mat-label>סיסמה</mat-label>
-            <input 
-              matInput 
-              type="password"
-              [(ngModel)]="form.password" 
-              name="password"
-              required
-              placeholder="לפחות 6 תווים"
-            >
-            <mat-icon matSuffix class="field-icon">lock</mat-icon>
-          </mat-form-field>
+            <!-- קוד אימות -->
+            <mat-form-field class="form-field" appearance="outline">
+              <mat-label>קוד אימות</mat-label>
+              <input 
+                matInput 
+                [(ngModel)]="verificationCode" 
+                name="verificationCode"
+                required
+                maxlength="6"
+                placeholder="הזן קוד 6 ספרות"
+                (input)="errorMessage = ''; onVerificationCodeChange($event)"
+                (paste)="onPasteVerificationCode($event)"
+                type="text"
+                inputmode="numeric"
+                pattern="[0-9]*"
+                autocomplete="one-time-code"
+              >
+              <mat-icon matSuffix class="field-icon">verified_user</mat-icon>
+              @if (verificationCode && verificationCode.length === 6) {
+                <mat-icon matSuffix class="field-icon success-icon">check_circle</mat-icon>
+              }
+            </mat-form-field>
 
-          <!-- אימות סיסמה -->
-          <mat-form-field class="form-field" appearance="outline">
-            <mat-label>אימות סיסמה</mat-label>
-            <input 
-              matInput 
-              type="password"
-              [(ngModel)]="form.confirmPassword" 
-              name="confirmPassword"
-              required
-              placeholder="הכנס סיסמה שוב"
-            >
-            <mat-icon matSuffix class="field-icon">lock_clock</mat-icon>
-          </mat-form-field>
+            <!-- כפתורים -->
+            <div class="verification-buttons">
+              <button 
+                mat-raised-button 
+                type="submit" 
+                class="auth-button verify-button"
+                [disabled]="!verificationCode || verificationCode.length !== 6 || isLoading"
+              >
+                @if (!isLoading) {
+                  <mat-icon class="button-icon">check</mat-icon>
+                } @else {
+                  <mat-spinner diameter="20"></mat-spinner>
+                }
+                <span>{{ isLoading ? 'מאמת...' : 'אמת קוד' }}</span>
+              </button>
 
-          <!-- כפתור רישום -->
-          <button 
-            mat-raised-button 
-            type="submit" 
-            class="auth-button register-button"
-            [disabled]="!form.name || !form.email || !form.password || !form.confirmPassword"
-          >
-            <mat-icon class="button-icon">person_add</mat-icon>
-            <span>הירשם עכשיו</span>
-            <div class="button-ripple"></div>
-          </button>
-        </form>
+              <button 
+                mat-button 
+                type="button" 
+                class="secondary-button"
+                (click)="resendCode()"
+                [disabled]="isLoading"
+              >
+                <mat-icon class="button-icon">refresh</mat-icon>
+                <span>שלח קוד שוב</span>
+              </button>
 
-        <!-- קישור להתחברות -->
-        <div class="auth-footer">
-          <p class="footer-text">
-            כבר יש לך חשבון?
-            <a routerLink="/login" class="auth-link">התחבר כאן</a>
-          </p>
-        </div>
+              <button 
+                mat-button 
+                type="button" 
+                class="secondary-button"
+                (click)="goBack()"
+                [disabled]="isLoading"
+              >
+                <mat-icon class="button-icon">arrow_back</mat-icon>
+                <span>חזור</span>
+              </button>
+            </div>
+          </form>
+        }
+
+        <!-- שלב 3: רישום הושלם -->
+        @if (currentStep === 'completed') {
+          <div class="completion-message">
+            <mat-icon class="completion-icon">celebration</mat-icon>
+            <h3>הרישום הושלם בהצלחה!</h3>
+            <p>מועבר אותך לעמוד הבית...</p>
+            <mat-spinner diameter="30"></mat-spinner>
+          </div>
+        }
+
+        <!-- קישור להתחברות - רק בשלב הראשון -->
+        @if (currentStep === 'form') {
+          <div class="auth-footer">
+            <p class="footer-text">
+              כבר יש לך חשבון?
+              <a routerLink="/login" class="auth-link">התחבר כאן</a>
+            </p>
+          </div>
+        }
       </mat-card-content>
     </mat-card>
 
